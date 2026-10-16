@@ -1,0 +1,106 @@
+[
+  {
+    "Name": "PSP_at3tool.exe",
+    "Files": [
+      {
+        "Path": "codecs/PSP_at3tool/PSP_at3tool.exe",
+        "Sha256": "823199113c59ffcd3fc3e1855dbb88a9cd44d29e82e7a7cfc42e8c92f2a61341"
+      },
+      {
+        "Path": "codecs/PSP_at3tool/msvcr71.dll",
+        "Sha256": "8094af5ee310714caebccaeee7769ffb08048503ba478b879edfef5f1a24fefe"
+      }
+    ]
+  },
+  {
+    "Name": "PS3_at3tool.exe",
+    "Files": [
+      {
+        "Path": "codecs/PS3_at3tool/PS3_at3tool.exe",
+        "Sha256": "8ac653df80443000c8532052a7005167031b546143295aa8c2ab89f3697af3bb"
+      },
+      {
+        "Path": "codecs/PS3_at3tool/Microsoft.VC80.CRT.manifest",
+        "Sha256": "aa8e944adfeed4b29cc9262c63f43ed752f8ef44d52fd868e41bdf1ea974d1b0",
+        "Source": "PS3_at3tool/Microsoft.VC80.CRT.manifest"
+      },
+      {
+        "Path": "codecs/PS3_at3tool/msvcm80.dll",
+        "Sha256": "7dcb3c45938d31854e46b5e5b0e16d538e29230d1bc81086d40c8db3bdf510bc",
+        "Source": "PS3_at3tool/msvcm80.dll"
+      },
+      {
+        "Path": "codecs/PS3_at3tool/msvcp80.dll",
+        "Sha256": "372af797353f9335915cd06d4076bab8410775dcaf2dac0593197d7c41bbffb2",
+        "Source": "PS3_at3tool/msvcp80.dll"
+      },
+      {
+        "Path": "codecs/PS3_at3tool/msvcr80.dll",
+        "Sha256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+        "Source": "PS3_at3tool/msvcr80.dll"
+      },
+      {
+        "Path": "codecs/PS3_at3tool/PS3_at3tool.exe.config",
+        "Sha256": "b555c9aefbae0876c8e287cf1b89da077fd29b819a54224e93ea63b17ef2b08d",
+        "Source": "PS3_at3tool/PS3_at3tool.exe.config"
+      }
+    ]
+  },
+  {
+    "Name": "PSVita_at9tool.exe",
+    "Files": [
+      {
+        "Path": "codecs/PSVita_at9tool/PSVita_at9tool.exe",
+        "Sha256": "d57d5f24b3f733864d1ac24d5a9293269b7b0a113e28944dcd848a168bb69b63"
+      },
+      {
+        "Path": "codecs/PSVita_at9tool/Microsoft.VC90.CRT.manifest",
+        "Sha256": "0c838c4262f99f27495a7c2a1bf4ec8f482d1c9bc2493c3c19b9360f1a06b8eb",
+        "Source": "PSVita_at9tool/Microsoft.VC90.CRT.manifest"
+      },
+      {
+        "Path": "codecs/PSVita_at9tool/msvcm90.dll",
+        "Sha256": "7a74da389fbd10a710c294c2e914dc6f18e05f028f07958a2fa53ac44f0e4b90",
+        "Source": "PSVita_at9tool/msvcm90.dll"
+      },
+      {
+        "Path": "codecs/PSVita_at9tool/msvcp90.dll",
+        "Sha256": "06918cf99ad26cd6cf106881c0d5bdb212dc0bac4549805c9f5906e3d03d152c",
+        "Source": "PSVita_at9tool/msvcp90.dll"
+      },
+      {
+        "Path": "codecs/PSVita_at9tool/msvcr90.dll",
+        "Sha256": "8e7fe1a1f3550c479ffd86a77bc9d10686d47f8727025bb891d8f4f0259354c8",
+        "Source": "PSVita_at9tool/msvcr90.dll"
+      },
+      {
+        "Path": "codecs/PSVita_at9tool/PSVita_at9tool.exe.config",
+        "Sha256": "bcb6f49a3884368d90acd62f3cf677db78b2a876a2b4fb4e6c82c26a3802fa9f",
+        "Source": "PSVita_at9tool/PSVita_at9tool.exe.config"
+      }
+    ]
+  },
+  {
+    "Name": "PS4_at9tool.exe",
+    "Files": [
+      {
+        "Path": "codecs/PS4_at9tool/PS4_at9tool.exe",
+        "Sha256": "8228fbd4ea5552a1ea80ca8304c09104423d142313d6d80ea49d63c048c8d00b"
+      },
+      {
+        "Path": "codecs/PS4_at9tool/msvcr120.dll",
+        "Sha256": "82225ec7e2da43a7a72a3d523698747512523afa488767ca6839c63a7a5706fa",
+        "Source": "PS4_at9tool/msvcr120.dll"
+      }
+    ]
+  },
+  {
+    "Name": "lame.exe",
+    "Files": [
+      {
+        "Path": "codecs/lame/lame.exe",
+        "Sha256": "b3e05350d2df52b58f99bbb009bb1d195736ff1d2ff54eb0794297a5a497bd6e"
+      }
+    ]
+  }
+]

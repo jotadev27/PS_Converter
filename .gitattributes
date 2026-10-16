@@ -1,0 +1,8 @@
+* text=auto eol=lf
+*.cs text
+*.ps1 text
+*.md text eol=lf
+*.json text eol=lf
+*.svg text eol=lf
+*.png binary
+*.ico binary
