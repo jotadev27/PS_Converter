@@ -24,7 +24,7 @@ Release downloads include the application and its codec files. **No repository c
 <details>
 <summary>Preview the English installer</summary>
 
-![Setup wizard with destination choices and console artwork on every page](assets/screenshots/setup.png)
+![Classic Inno Setup wizard with the conversion logo and console artwork](assets/screenshots/setup.png)
 
 </details>
 

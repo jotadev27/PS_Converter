@@ -22,7 +22,18 @@ The runtime data-inspection utilities in tools read cabinets and MSI streams wit
   -RuntimeDirectory '<authorized app-local runtime folder>'
 ```
 
-The builder verifies codec hashes, compiles the application, runs the C# checks, creates the portable archive, embeds its complete hash inventory into the installer, and compares extracted files from both packages. It also checks that the installer refuses a nonempty destination without altering its contents.
+Packaging additionally requires an authorized, officially signed Inno Setup 6.7.3 compiler. Pass its ISCC.exe path with -InnoCompiler. The default project-local path is .analysis/inno/compiler/ISCC.exe. Build scripts never download or install the compiler automatically. The compiler can be installed using its official /PORTABLE=1 mode, which avoids registration and shortcuts.
+
+The builder verifies codec hashes, compiles the application, runs the C# checks, creates the portable archive and builds the classic Inno Setup wizard. Verification installs into a new project test folder and compares every installed file against the portable inventory by SHA-256. It also checks that the installer refuses a nonempty destination without altering its contents. The generated installer creates no registry entries or shortcuts and does not install system runtimes.
+
+To rebuild only the installer from an existing portable ZIP, preserving the archive's bytes:
+
+```powershell
+.\tools\BuildClassicInstaller.ps1 -Verify -UpdateRelease `
+  -InnoCompiler '<authorized Inno Setup folder>\ISCC.exe'
+```
+
+This replaces only the local setup EXE and SHA256SUMS.txt. It does not push or upload anything. The C# helper in tools/Setup.cs generates the approved artwork; it is not an installer implementation.
 
 The separate -VerifyNative option executes the actual codecs on generated audio. It returns failure if a platform fails and is never treated as equivalent to the synthetic wrapper checks. Run native binaries only in an environment you have authorized for that purpose.
 

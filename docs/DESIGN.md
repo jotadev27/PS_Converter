@@ -22,4 +22,4 @@ The four transparent console illustrations are original generated assets, embedd
 
 ## Installer
 
-The installer uses the same typography, palette, app icon and console illustrations. Every page keeps a substantial artwork panel. The English wizard separates welcome, license consent, destination, install confirmation and completion. Its payload is verified before copying; an existing destination is preserved.
+The installer uses Inno Setup's classic native wizard, with standard Next, Back and Cancel controls. The approved conversion logo, muted sidebar and console illustrations appear on welcome and completion; intermediate pages show the same logo in the header. The English wizard includes license consent, a destination selector and install confirmation. Existing nonempty destinations are preserved. Application code and the portable archive are unchanged by this installer replacement.

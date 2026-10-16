@@ -1,4 +1,4 @@
-param([switch]$Verify, [switch]$VerifyNative, [switch]$Package, [switch]$CleanInstaller, [switch]$SourceOnly, [ValidatePattern('^[a-zA-Z0-9_-]+$')][string]$PortableName = 'PS_converter', [string]$CodecSourceDirectory, [string]$RuntimeDirectory)
+param([switch]$Verify, [switch]$VerifyNative, [switch]$Package, [switch]$CleanInstaller, [switch]$SourceOnly, [ValidatePattern('^[a-zA-Z0-9_-]+$')][string]$PortableName = 'PS_converter', [string]$CodecSourceDirectory, [string]$RuntimeDirectory, [string]$InnoCompiler)
 $ErrorActionPreference = 'Stop'
 if ($SourceOnly -and ($Package -or $VerifyNative)) { throw 'Source-only builds cannot create a complete release package or run native codec tests.' }
 $projectRoot = $PSScriptRoot
@@ -65,6 +65,6 @@ if ($VerifyNative) {
     if ($LASTEXITCODE -ne 0) { throw 'Some native platform checks failed. See the printed native-results.txt location; this is not a fully verified platform release.' }
 }
 if ($Package) {
-    & (Join-Path $projectRoot 'tools\PackageRelease.ps1') -ProjectRoot $projectRoot -ApplicationDirectory $portable -Verify:$Verify -CleanInstaller:$CleanInstaller
+    & (Join-Path $projectRoot 'tools\PackageRelease.ps1') -ProjectRoot $projectRoot -ApplicationDirectory $portable -Verify:$Verify -CleanInstaller:$CleanInstaller -InnoCompiler $InnoCompiler
 }
 Write-Output "Built $application"

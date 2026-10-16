@@ -1,8 +1,7 @@
-param([Parameter(Mandatory=$true)][string]$ProjectRoot,[Parameter(Mandatory=$true)][string]$ApplicationDirectory,[switch]$Verify,[switch]$CleanInstaller)
+param([Parameter(Mandatory=$true)][string]$ProjectRoot,[Parameter(Mandatory=$true)][string]$ApplicationDirectory,[switch]$Verify,[switch]$CleanInstaller,[string]$InnoCompiler)
 $ErrorActionPreference='Stop'
 $ProjectRoot=[IO.Path]::GetFullPath($ProjectRoot)
 $ApplicationDirectory=[IO.Path]::GetFullPath($ApplicationDirectory)
-$compiler=Join-Path $env:WINDIR 'Microsoft.NET\Framework64\v4.0.30319\csc.exe'
 $stage=Join-Path $ProjectRoot ('.analysis\release-stage\'+[guid]::NewGuid().ToString('N'))
 $output=Join-Path $ProjectRoot 'installer'
 New-Item -ItemType Directory -Path $stage -Force | Out-Null
@@ -41,35 +40,12 @@ $stream=[IO.File]::Open($portable,[IO.FileMode]::CreateNew)
 $archive=[IO.Compression.ZipArchive]::new($stream,[IO.Compression.ZipArchiveMode]::Create)
 try {foreach ($file in $files) {[IO.Compression.ZipFileExtensions]::CreateEntryFromFile($archive,$file.Source,$file.Name,[IO.Compression.CompressionLevel]::Optimal) | Out-Null}}
 finally {$archive.Dispose();$stream.Dispose()}
-$termsPath=Join-Path $stage 'license-terms.txt'
-$terms=(Get-Content -LiteralPath (Join-Path $ProjectRoot 'LICENSE') -Raw)+"`r`n`r`nTHIRD-PARTY NOTICES`r`n`r`n"+(Get-Content -LiteralPath (Join-Path $ProjectRoot 'docs\THIRD_PARTY.md') -Raw)
-[IO.File]::WriteAllText($termsPath,$terms,[Text.UTF8Encoding]::new($false))
-$resources=@(('/resource:'+$portable+',portable.zip'),('/resource:'+$manifestPath+',package.manifest'),('/resource:'+$termsPath+',license.txt'),('/resource:'+(Join-Path $ProjectRoot 'assets\app.ico')+',app.icon'))
-$resources+=@('psp','ps3','vita','ps4') | ForEach-Object {'/resource:'+(Join-Path $ProjectRoot ('assets\consoles\'+$_+'.png'))+',console.'+$_}
-$resources+=@('upload','file-music','folder','settings-2','play','square','x','check','arrow-right') | ForEach-Object {'/resource:'+(Join-Path $ProjectRoot ('assets\icons\'+$_+'.png'))+',ui-icon.'+$_}
-$setup=Join-Path $stage 'PS_Converter-v1.0-setup.exe'
-$references=@('/r:System.dll','/r:System.Core.dll','/r:System.Drawing.dll','/r:System.Windows.Forms.dll','/r:System.Runtime.Serialization.dll','/r:System.IO.Compression.dll','/r:System.IO.Compression.FileSystem.dll')
-& $compiler /nologo /target:winexe /platform:anycpu /optimize+ /warn:4 /warnaserror+ "/out:$setup" "/win32icon:$(Join-Path $ProjectRoot 'assets\app.ico')" "/win32manifest:$(Join-Path $ProjectRoot 'app.manifest')" @references @resources (Join-Path $ProjectRoot 'tools\Setup.cs') (Join-Path $ProjectRoot 'src\Theme.cs') (Join-Path $ProjectRoot 'src\Models.cs') (Join-Path $ProjectRoot 'src\PathSafety.cs')
-if ($LASTEXITCODE -ne 0) {throw 'Installer compilation failed.'}
-if ($Verify) {
-    $extracted=Join-Path $stage 'portable-check'
-    [IO.Compression.ZipFile]::ExtractToDirectory($portable,$extracted)
-    $installed=Join-Path $stage 'installer-check'
-    $process=Start-Process -FilePath $setup -ArgumentList @('--verify-package',('"'+$installed+'"')) -WindowStyle Hidden -PassThru
-    if (-not $process.WaitForExit(30000)) {$process.Kill();throw 'Installer extraction test timed out.'}
-    if ($process.ExitCode -ne 0) {throw 'Installer extraction test failed.'}
-    foreach ($file in $manifest) {
-        foreach ($folder in @($extracted,$installed)) {
-            if ((Get-FileHash -LiteralPath (Join-Path $folder $file.Name) -Algorithm SHA256).Hash.ToLowerInvariant() -ne $file.Sha256) {throw "Release extraction differs: $($file.Name)"}
-        }
-    }
-    $protected=Join-Path $stage 'preserve-existing';New-Item -ItemType Directory -Path $protected | Out-Null
-    $sentinel=Join-Path $protected 'sentinel.txt';[IO.File]::WriteAllText($sentinel,'preserve this file')
-    $process=Start-Process -FilePath $setup -ArgumentList @('--verify-package',('"'+$protected+'"')) -WindowStyle Hidden -PassThru
-    if (-not $process.WaitForExit(10000)) {$process.Kill();throw 'Existing-file protection test timed out.'}
-    if ($process.ExitCode -eq 0 -or [IO.File]::ReadAllText($sentinel) -ne 'preserve this file' -or @(Get-ChildItem -LiteralPath $protected -File).Count -ne 1) {throw 'Installer did not preserve the existing destination.'}
-    Write-Output ("PASS portable/installer extraction hashes for all $($manifest.Count) files; existing destination preserved.")
-}
+$classicOutput=@(& (Join-Path $ProjectRoot 'tools\BuildClassicInstaller.ps1') -ProjectRoot $ProjectRoot -PortableArchive $portable -InnoCompiler $InnoCompiler -Verify:$Verify)
+$classicOutput | Write-Output
+$setupLine=@($classicOutput | Where-Object {$_ -is [string] -and $_.StartsWith('Classic installer: ')})
+if ($setupLine.Count -ne 1) {throw 'The classic installer output was not reported.'}
+$setup=$setupLine[0].Substring('Classic installer: '.Length)
+if ($Verify) {Write-Output ("PASS portable archive inventory: $($manifest.Count) explicitly selected files.")}
 $notes=@'
 PS_Converter v1.0
 Release date: 2026-10-16
